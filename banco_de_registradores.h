@@ -13,7 +13,9 @@ typedef struct{
 
 void InicializaBanco(BancoDeRegistradores *banco);
 
-void Store(Registrador *destino, int valor);
+void StoreReg(Registrador *destino, int valor);
+
+Registrador LoadReg(Registrador *reg);
 
 void PrintBanco(BancoDeRegistradores banco);
 

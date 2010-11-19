@@ -11,20 +11,20 @@ void InicializaBanco(BancoDeRegistradores *banco){
 	banco->fp = NULL;
 }
 
-void Store(Registrador *destino, int valor){
+void StoreReg(Registrador *destino, int valor){
 	*destino = valor;
 }
 
-Registrador Load(Registrador *reg){
+Registrador LoadReg(Registrador *reg){
 	return *reg;
 }
 
 void PrintBanco(BancoDeRegistradores banco){
-	printf(" r0: %d\n", banco.r0);
-	printf(" r1: %d\n", banco.r1);
-	printf(" r2: %d\n", banco.r2);
-	printf(" r3: %d\n", banco.r3);
-	printf(" r4: %d\n", banco.r4);
+	printf(" r0: %x\n", banco.r0);
+	printf(" r1: %x\n", banco.r1);
+	printf(" r2: %x\n", banco.r2);
+	printf(" r3: %x\n", banco.r3);
+	printf(" r4: %x\n", banco.r4);
 	printf(" sp: %p\n", banco.sp);
 	printf(" ra: %p\n", banco.ra);
 	printf(" fp: %p\n", banco.fp);
