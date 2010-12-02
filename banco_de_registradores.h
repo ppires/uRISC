@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-typedef int Registrador;
+typedef short int Registrador;
 
 typedef struct{
 	Registrador r0, r1, r2, r3, r4;

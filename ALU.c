@@ -1,35 +1,76 @@
 #include "ALU.h"
 
-void add(Registrador *c, Registrador a, Registrador b){
+void add(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c = a + b;
+	flags->zero = *c == 0;
+	flags->neg = *c < 0;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
+	flags->carry = verifyCarry(a, b);
 }
 
-void addinc(Registrador *c, Registrador a, Registrador b){
+void addinc(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c =  a + b + 1;
+	flags->zero = *c == 0;
+	flags->neg = *c < 0;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
+	flags->carry = verifyCarry(a, b);
 }
 
-void and(Registrador *c, Registrador a, Registrador b){
+void and(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c = a & b;
+	//flags->zero = *c == 0 ? TRUE : FALSE; TODO
+	//flags->neg = *c < 0 ? TRUE : FALSE;
+	flags->negzero = flags->zero || flags->neg;
+	flags->carry = FALSE;
+	flags->overflow = FALSE;
 }
 
-void andnota(Registrador *c, Registrador a, Registrador b){
+void andnota(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c =  ~a & b;
+	*c = a & b;
+	//flags->zero = *c == 0 ? TRUE : FALSE; TODO
+	//flags->neg = *c < 0 ? TRUE : FALSE;
+	flags->negzero = flags->zero || flags->neg;
+	flags->carry = FALSE;
+	flags->overflow = FALSE;
 }
 
-void asl(Registrador *c, Registrador a){
+void asl(Flags *flags, Registrador *c, Registrador a){
 	*c = a << 1;
+	flags->zero = *c == 0 ? TRUE : FALSE;
+	flags->neg = *c < 0 ? TRUE : FALSE;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
+	flags->carry = int2bin(a)[15];
 }
 
-void asr(Registrador *c, Registrador a){
+void asr(Flags *flags, Registrador *c, Registrador a){
 	*c = a >> 1;
+	flags->zero = *c == 0 ? TRUE : FALSE;
+	flags->neg = *c < 0 ? TRUE : FALSE;
+	flags->negzero = flags->zero || flags->neg;
+	flags->carry = FALSE;
+	flags->overflow = FALSE;
 }
 
-void deca(Registrador *c, Registrador a){
+void deca(Flags *flags, Registrador *c, Registrador a){
 	*c = a - 1;
+	flags->zero = *c == 0 ? TRUE : FALSE;
+	flags->neg = *c < 0 ? TRUE : FALSE;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
+	flags->carry = verifyCarry(a, -1);
 }
 
-void inca(Registrador *c, Registrador a){
+void inca(Flags *flags, Registrador *c, Registrador a){
 	*c = a + 1;
+	flags->zero = *c == 0 ? TRUE : FALSE;
+	flags->neg = *c < 0 ? TRUE : FALSE;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
+	flags->carry = verifyCarry(a, 1);
 }
 
 void j(Registrador destino_extended){
@@ -76,62 +117,132 @@ Registrador loadlit(){
 	/************/
 }
 
-void lsl(Registrador *c, Registrador a){
+void lsl(Flags *flags, Registrador *c, Registrador a){
 	*c = a << 1;
+	flags->zero = *c == 0 ? TRUE : FALSE;
+	flags->neg = *c < 0 ? TRUE : FALSE;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = FALSE;
+	flags->carry = int2bin(a)[15];
 }
 
-void lsr(Registrador *c, Registrador a){
+void lsr(Flags *flags, Registrador *c, Registrador a){
 	*c = a >> 1;
+	flags->zero = *c == 0 ? TRUE : FALSE;
+	flags->neg = *c < 0 ? TRUE : FALSE;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = FALSE;
+	flags->carry = FALSE;
 }
 
-void nand(Registrador *c, Registrador a, Registrador b){
+void nand(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c = ~(a & b);
+	flags->zero = *c == 0 ? TRUE : FALSE;
+	flags->neg = *c < 0 ? TRUE : FALSE;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = FALSE;
+	flags->carry = FALSE;
 }
 
-void nor(Registrador *c, Registrador a, Registrador b){
+void nor(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c = ~(a | b);
+	flags->zero = *c == 0 ? TRUE : FALSE;
+	flags->neg = *c < 0 ? TRUE : FALSE;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = FALSE;
+	flags->carry = FALSE;
 }
 
-void ones(Registrador *reg){
+void ones(Flags *flags, Registrador *reg){
 	*reg = 1;
+	flags->zero = *c == 0 ? TRUE : FALSE;
+	flags->neg = *c < 0 ? TRUE : FALSE;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = FALSE;
+	flags->carry = FALSE;
 }
 
-void or(Registrador *c, Registrador a, Registrador b){
+void or(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c = a | b;
+	flags->zero = *c == 0;
+	flags->neg = *c < 0;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = FALSE;
+	flags->carry = FALSE;
 }
 
-void ornotb(Registrador *c, Registrador a, Registrador b){
+void ornotb(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c = a | ~b;
+	flags->zero = *c == 0;
+	flags->neg = *c < 0;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = FALSE;
+	flags->carry = FALSE;
 }
 
-void passa(Registrador *c, Registrador a){
+void passa(Flags *flags, Registrador *c, Registrador a){
 	*c = a;
+	flags->zero = *c == 0;
+	flags->neg = *c < 0;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = FALSE;
+	flags->carry = FALSE;
 }
 
-void passnota(Registrador *c, Registrador a){
+void passnota(Flags *flags, Registrador *c, Registrador a){
 	*c = ~a;
+	flags->zero = *c == 0;
+	flags->neg = *c < 0;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = FALSE;
+	flags->carry = FALSE;
 }
 
 void store(Registrador a, Registrador b){
 	/******/
 }
 
-void sub(Registrador *c, Registrador a, Registrador b){
+void sub(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c = a - b;
+	flags->zero = *c == 0;
+	flags->neg = *c < 0;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
+	flags->carry = verifyCarry(a, b);
 }
 
-void subdec(Registrador *c, Registrador a, Registrador b){
+void subdec(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c = a - b - 1;
+	flags->zero = *c == 0;
+	flags->neg = *c < 0;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
+	flags->carry = verifyCarry(a, -b);
 }
 
-void xnor(Registrador *c, Registrador a, Registrador b){
+void xnor(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c = ~(a ^ b);
+	flags->zero = *c == 0;
+	flags->neg = *c < 0;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = FALSE;
+	flags->carry = FALSE;
 }
 
-void xor(Registrador *c, Registrador a, Registrador b){
+void xor(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c = a ^ b;
+	flags->zero = *c == 0;
+	flags->neg = *c < 0;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = FALSE;
+	flags->carry = FALSE;
 }
 
-void zeros(Registrador *reg){
+void zeros(Flags *flags, Registrador *reg){
 	*reg = 0;
+	flags->zero = TRUE;
+	flags->neg = FALSE;
+	flags->negzero = flags->zero || flags->neg;
+	flags->overflow = FALSE;
+	flags->carry = FALSE;
 }

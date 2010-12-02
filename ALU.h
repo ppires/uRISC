@@ -2,13 +2,12 @@
 #define ALU_H
 
 #include "banco_de_registradores.h"
+#include "aux.h"
+#include "Controle.h"
 
 extern BancoDeRegistradores banco;
 
-typedef struct{
-	Registrador aluSrcA;
-	Registrador aluSrcB;
-};
+
 
 /* ALU functions */
 
