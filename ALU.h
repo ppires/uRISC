@@ -3,15 +3,24 @@
 
 #include "banco_de_registradores.h"
 #include "aux.h"
-#include "Controle.h"
+#include "controle.h"
+#include "banco_de_registradores.h"
+#include "memoria.h"
 
-extern BancoDeRegistradores banco;
+extern BancoDeInstrucoes bancoI;
+extern BancoDeRegistradores bancoR;
+extern Memoria mem;
+extern Registrador *PC;
+extern Registrador IR;
+extern Registrador aluA, aluB;
+extern Controle controle;
+extern ALUFlags alu_flags;
 
 
 
 /* ALU functions */
 
-void add(Registrador *c, Registrador a, Registrador b);
+void add(Flags *flags, Registrador *c, Registrador a, Registrador b);
 
 void addinc(Registrador *c, Registrador a, Registrador b);
 

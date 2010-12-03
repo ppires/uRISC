@@ -3,14 +3,43 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+../banco_de_registradores.o \
+../io.o \
+../main.o 
+
 C_SRCS += \
-../io.c 
+../ALU.c \
+../aux.c \
+../banco_de_registradores.c \
+../controle.c \
+../io.c \
+../main.c \
+../memoria.c \
+../mux.c \
+../processador.c 
 
 OBJS += \
-./io.o 
+./ALU.o \
+./aux.o \
+./banco_de_registradores.o \
+./controle.o \
+./io.o \
+./main.o \
+./memoria.o \
+./mux.o \
+./processador.o 
 
 C_DEPS += \
-./io.d 
+./ALU.d \
+./aux.d \
+./banco_de_registradores.d \
+./controle.d \
+./io.d \
+./main.d \
+./memoria.d \
+./mux.d \
+./processador.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

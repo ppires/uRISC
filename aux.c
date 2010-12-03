@@ -16,6 +16,19 @@ char *int2bin(short int n){
     return binary;
 }
 
+short int bin2int(char *bin){
+	short int integer = 0;
+	int i, j = 0;
+	for(i = strlen(bin) - 1; i >= 0 ; i--){
+	    printf("2 elevado a %d = %d\n", j, (short int) pow(2, j));
+		if(bin[i] == '1'){
+			integer += (short int) pow(2, j);
+		}
+		j++;
+	}
+	return integer;
+}
+
 int verifyCarry(short int a, short int b){
 	char *st_a = int2bin(a);
 	char *st_b = int2bin(b);
@@ -35,4 +48,20 @@ char *substring(char *string, int num1, int num2){
 	}
 	ans[strlen(string) - 1] = '\0';
 	return ans;
+}
+
+char *extendSignal(char *signal){
+	char *extended = malloc(sizeof(char) * 17);
+	int i, j = 0;
+	for(i = 0; i < 16; i++){
+		if(i < 16 - strlen(signal)){
+			extended[i] = signal[0];
+		}
+		else{
+			extended[i] = signal[j];
+			j++;
+		}
+	}
+	extended[17] = '\0';
+	return extended;
 }

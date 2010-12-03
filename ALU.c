@@ -1,5 +1,98 @@
 #include "ALU.h"
 
+void execALU(){
+	if(controle.PCWriteCond){ // JUMP
+
+	}
+	else if(controle.OpOn){ // ALU
+		switch(controle.op){
+		case "00000": //zeros
+			zeros(&controle.RegDST);
+			break;
+		case "00010": //and
+			and(&controle.RegDST, aluA, aluB);
+			break;
+		case "01010": // andnota
+			andnota(&controle.RegDST, aluA, aluB);
+			break;
+		case "01001": // passa
+			passa(&controle.RegDST, aluA);
+			break;
+		case "00110": // xor
+			xor(&controle.RegDST, aluA, aluB);
+			break;
+		case "00100": // or
+			or(&controle.RegDST, aluA, aluB);
+			break;
+		case "00101": // nor
+			nor(&controle.RegDST, aluA, aluB);
+			break;
+		case "00111": // xnor
+			xnor(&controle.RegDST, aluA, aluB);
+			break;
+		case "01000": // passnota
+			pasnota(&controle.RegDST, aluA);
+			break;
+		case "01011": // ornotb
+			ornotb(&controle.RegDST, aluA, aluB);
+			break;
+		case "00011": // nand
+			nand(&controle.RegDST, aluA, aluB);
+			break;
+		case "00001": // ones
+			ones(&controle.RegDST);
+			break;
+		case "11000": // add
+			add(&controle.RegDST, aluA, aluB);
+			break;
+		case "11010": // addinc
+			addinc(&controle.RegDST, aluA, aluB);
+			break;
+		case "11100": // inca
+			inca(&controle.RegDST, aluA);
+			break;
+		case "11011": // subdec
+			subdec(&controle.RegDST, aluA, aluB);
+			break;
+		case "11001": //sub
+			sub(&controle.RegDST, aluA, aluB);
+			break;
+		case "11101": // deca
+			deca(&controle.RegDST, aluA);
+			break;
+		case "10000": // lsl
+			lsl(&controle.RegDST, aluA);
+			break;
+		case "10010": // lsr
+			lsr(&controle.RegDST, aluA);
+			break;
+		case "10011": // asr
+			asr(&controle.RegDST, aluA);
+			break;
+		case "10001": // asl
+			asl(&controle.RegDST, aluA);
+			break;
+		}
+	}
+	else { // load constant lcl lcr loadlit...
+		switch(controle.op){
+		case "00": // jump false
+			jf(controle.PCCond, aluB);
+			break;
+		case "01": // jump true
+			jt(controle.PCCond, aluB);
+			break;
+		case "10": // jump incondicional
+			j(aluB);
+			break;
+		case "11": // jump and link / jump regiter
+			//switch()
+			//jal(aluB);
+			break;
+		}
+	}
+}
+
 void add(Flags *flags, Registrador *c, Registrador a, Registrador b){
 	*c = a + b;
 	flags->zero = *c == 0;
@@ -74,31 +167,31 @@ void inca(Flags *flags, Registrador *c, Registrador a){
 }
 
 void j(Registrador destino_extended){
-	pc += 1;
-	pc += destino_extended;
+	PC += 1;
+	PC += destino_extended;
 }
 
 void jal(Registrador destino){
-	banco.ra = pc + 1;
-	pc = destino;
+	bancoR.ra = PC + 1;
+	PC = destino;
 }
 
 void jf(int flag, Registrador destino_extended){
-	if(!flag){
-		pc += 1;
-		pc += destino_extended;
+	if(flag){
+		PC += 1;
+		PC += destino_extended;
 	}
 }
 
 void jt(int flag, Registrador destino_extended){
 	if(flag){
-		pc += 1;
-		pc += destino_extended;
+		PC += 1;
+		PC += destino_extended;
 	}
 }
 
 void jr(Registrador destino){
-	pc = destino;
+	PC = destino;
 }
 
 void lch(Registrador *c, int offset){

@@ -7,7 +7,7 @@
 typedef short int Registrador;
 
 typedef struct{
-	Registrador r0, r1, r2, r3, r4;
+	Registrador regs[5];
 	Registrador *ra, *fp, *sp;
 } BancoDeRegistradores;
 

@@ -10,13 +10,13 @@ typedef struct{
 	short int overflow;
 	short int carry;
 	short int true;
-}Flags;
+}ALUFlags;
 
 typedef struct {
 	int type; // 0, 1, 2 ou 3
 
 	// Formato 01
-	char *wc;
+	Registrador *wc;
 	char *op;
 	char *ra;
 	char *rb;
@@ -26,14 +26,25 @@ typedef struct {
 	char *offset11;
 
 	//Formato 11
-	char *rc;
 	char *r;
 	char *offset8;
 
 	//Formato 00
-	char *op;
-	char *ofset12;
+	char *offset12;
 	char *cond;
 }Instrucao;
+
+typedef struct {
+	char *ALUop;
+	short int RegDST;
+	short int RegWrite;
+	short int MemWrite;
+	short int MemRead;
+	short int IRWrite;
+	short int PCWriteCond;
+	short int Jump;
+	short int OpOn;
+	short int PCCond;
+}Controle;
 
 #endif /* CONTROLE_H_ */

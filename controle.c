@@ -1,6 +1,6 @@
-#include "Controle.h"
+#include "controle.h"
 
-Intrucao decodeInstruction(short int hex){
+Instrucao decodeInstruction(short int hex){
 	bin = int2bin(hex);
 	Instrucao instrucao;
 	inicializaInstrucao(&instrucao);
@@ -52,7 +52,7 @@ void inicializaInstrucao(Instrucao *i){
 	i->cond = NULL;
 	i->offset11 = NULL;
 	i->offset8 = NULL;
-	i->ofset12 = NULL;
+	i->offset12 = NULL;
 	i->op = NULL;
 	i->r = NULL;
 	i->ra = NULL;
@@ -60,4 +60,25 @@ void inicializaInstrucao(Instrucao *i){
 	i->rb = NULL;
 	i->rc = NULL;
 	i->wc = NULL;
+}
+
+void inicializaControle(Controle *controle){
+	controle->ALUop = NULL;
+	controle->RegDST = FALSE;
+	controle->RegWrite = FALSE;
+	controle->MemWrite = FALSE;
+	controle->MemRead = FALSE;
+	controle->IRWrite = FALSE;
+	controle->PCWriteCond = FALSE;
+	controle->OpOn = FALSE;
+	controle->PCCond = FALSE;
+}
+
+void inicializaALUFlags(ALUFlags *flags){
+	flags->carry = FALSE;
+	flags->neg = FALSE;
+	flags->negzero = FALSE;
+	flags->overflow = FALSE;
+	flags->true = FALSE;
+	flags->zero = FALSE;
 }
