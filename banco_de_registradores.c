@@ -57,47 +57,47 @@ void carregaRegistradores(Instrucao instrucao){
 			aluB = bin2int(instrucao.rb);
 			break;
 		}
-		controle->ALUop = instrucao.op;
-		controle->OpOn = TRUE;
-		controle->RegWrite = FALSE;
-		controle->MemWrite = FALSE;
-		controle->MemRead = FALSE;
-		controle->IRWrite = FALSE;
-		controle->PCWriteCond = TRUE;
-		controle->RegDST = NULL;
+		controle.ALUop = instrucao.op;
+		controle.OpOn = TRUE;
+		controle.RegWrite = FALSE;
+		controle.MemWrite = FALSE;
+		controle.MemRead = FALSE;
+		controle.IRWrite = FALSE;
+		controle.PCWriteCond = TRUE;
+		controle.RegDST = NULL;
 		break;
 	case 1:
 		aluA = bancoR.regs[bin2int(instrucao.ra)];
 		aluB = bancoR.regs[bin2int(instrucao.rb)];
-		controle->RegDST = bin2int(instrucao.wc);
-		controle->ALUop = instrucao.op;
-		controle->RegWrite = FALSE;
-		controle->MemWrite = FALSE;
-		controle->MemRead = TRUE;
-		controle->IRWrite = FALSE;
-		controle->PCWriteCond = FALSE;
+		controle.RegDST = bin2int(instrucao.wc);
+		controle.ALUop = instrucao.op;
+		controle.RegWrite = FALSE;
+		controle.MemWrite = FALSE;
+		controle.MemRead = TRUE;
+		controle.IRWrite = FALSE;
+		controle.PCWriteCond = FALSE;
 		break;
 	case 2:
 		aluA = bancoR.regs[bin2int(instrucao.rc)];
 		aluB = bin2int(extendSignal(instrucao.offset12));
-		controle->RegDST = bin2int(instrucao.wc);
-		controle->ALUop = instrucao.op;
-		controle->RegWrite = TRUE;
-		controle->MemWrite = FALSE;
-		controle->MemRead = FALSE;
-		controle->IRWrite = FALSE;
-		controle->PCWriteCond = FALSE;
+		controle.RegDST = bin2int(instrucao.wc);
+		controle.ALUop = instrucao.op;
+		controle.RegWrite = TRUE;
+		controle.MemWrite = FALSE;
+		controle.MemRead = FALSE;
+		controle.IRWrite = FALSE;
+		controle.PCWriteCond = FALSE;
 		break;
 	case 3:
 		aluA = bancoR.regs[bin2int(instrucao.rc)];
 		aluB = bin2int(extendSignal(instrucao.offset8));
-		controle->RegDST = bin2int(instrucao.wc);
-		controle->ALUop = instrucao.op;
-		controle->RegWrite = TRUE;
-		controle->MemWrite = FALSE;
-		controle->MemRead = FALSE;
-		controle->IRWrite = FALSE;
-		controle->PCWriteCond = FALSE;
+		controle.RegDST = bin2int(instrucao.wc);
+		controle.ALUop = instrucao.op;
+		controle.RegWrite = TRUE;
+		controle.MemWrite = FALSE;
+		controle.MemRead = FALSE;
+		controle.IRWrite = FALSE;
+		controle.PCWriteCond = FALSE;
 		break;
 	}
 }

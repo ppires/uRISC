@@ -1,5 +1,5 @@
 ALU.d ALU.o: ../ALU.c ../ALU.h ../banco_de_registradores.h ../controle.h \
- ../aux.h ../memoria.h
+ ../processador.h ../memoria.h ../aux.h
 
 ../ALU.h:
 
@@ -7,6 +7,8 @@ ALU.d ALU.o: ../ALU.c ../ALU.h ../banco_de_registradores.h ../controle.h \
 
 ../controle.h:
 
-../aux.h:
+../processador.h:
 
 ../memoria.h:
+
+../aux.h:

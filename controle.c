@@ -4,32 +4,32 @@ Instrucao decodeInstrucao(short int hex){
 	bin = int2bin(hex);
 	Instrucao instrucao;
 	inicializaInstrucao(&instrucao);
-	switch(substring(bin, 0, 1)){
-	case "00":
+	switch(bin2int(substring(bin, 0, 1))){
+	case 0:
 		instrucao.type = 0;
 		instrucao.op = substring(bin, 2, 3);
-		switch(instrucao.op){
-		case "00":
+		switch(bin2int(instrucao.op)){
+		case 0:
 			controle_alu.op_code = 11; // jf.cond
 			instrucao.cond = substring(bin, 4, 7);
 			instrucao.offset8 = substring(bin, 8, 15);
 			break;
-		case "01":
+		case 1:
 			controle_alu.op_code = 13; // jt.cond
 			instrucao.cond = substring(bin, 4, 7);
 			instrucao.offset8 = substring(bin, 8, 15);
 			break;
-		case "10":
+		case 2:
 			controle_alu.op_code = 9; // j
 			instrucao.offset12 = substring(bin, 4, 15);
 			break;
-		case "11":
+		case 3:
 			instrucao.r = substring(bin, 4, 4);
-			switch(instrucao.r){
-			case "0":
+			switch(bin2int(instrucao.r)){
+			case 0:
 				controle_alu.op_code = 10; // jal
 				break;
-			case "1":
+			case 1:
 				controle_alu.op_code = 12; // jr
 				break;
 			}
@@ -37,53 +37,53 @@ Instrucao decodeInstrucao(short int hex){
 			break;
 		}
 		break;
-	case "01":
+	case 1:
 		instrucao.type = 1;
 		instrucao.wc = substring(bin, 2, 4);
 		instrucao.op = substring(bin, 5, 9);
 		instrucao.ra = substring(bin, 10, 12);
 		instrucao.rb = substring(bin, 13, 15);
-		switch(instrucao.op){
-			case "00000": controle_alu.op_code = 32; break; // zeros
-			case "00010": controle_alu.op_code = 3; break; // and
-			case "01010": controle_alu.op_code = 4; break; // andnota
-			case "01001": controle_alu.op_code = 25; break; // passa
-			case "00110": controle_alu.op_code = 31; break; // xor
-			case "00100": controle_alu.op_code = 23; break; // or
-			case "00101": controle_alu.op_code = 21; break; // nor
-			case "00111": controle_alu.op_code = 30; break; // xnor
-			case "01000": controle_alu.op_code = 26; break; // passnota
-			case "01011": controle_alu.op_code = 24; break; // ornotb
-			case "00011": controle_alu.op_code = 20; break; // nand
-			case "00001": controle_alu.op_code = 22; break; // ones
-			case "11000": controle_alu.op_code = 1; break; // add
-			case "11010": controle_alu.op_code = 2; break; // addinc
-			case "11100": controle_alu.op_code = 8; break; // inca
-			case "11011": controle_alu.op_code = 29; break; // subdec
-			case "11001": controle_alu.op_code = 28; break; // sub
-			case "11101": controle_alu.op_code = 7; break; // deca
-			case "10000": controle_alu.op_code = 18; break; // lsl
-			case "10010": controle_alu.op_code = 19; break; // lsr
-			case "10011": controle_alu.op_code = 6; break; // asr
-			case "10001": controle_alu.op_code = 5; break; // asl
-			case "10100": controle_alu.op_code = 16; break; // load
-			case "10110": controle_alu.op_code = 27; break; // store
+		switch(bin2int(instrucao.op)){
+			case 0: controle_alu.op_code = 32; break; // zeros
+			case 2: controle_alu.op_code = 3; break; // and
+			case 10: controle_alu.op_code = 4; break; // andnota
+			case 9: controle_alu.op_code = 25; break; // passa
+			case 6: controle_alu.op_code = 31; break; // xor
+			case 4: controle_alu.op_code = 23; break; // or
+			case 5: controle_alu.op_code = 21; break; // nor
+			case 7: controle_alu.op_code = 30; break; // xnor
+			case 8: controle_alu.op_code = 26; break; // passnota
+			case 11: controle_alu.op_code = 24; break; // ornotb
+			case 3: controle_alu.op_code = 20; break; // nand
+			case 1: controle_alu.op_code = 22; break; // ones
+			case 24: controle_alu.op_code = 1; break; // add
+			case 26: controle_alu.op_code = 2; break; // addinc
+			case 28: controle_alu.op_code = 8; break; // inca
+			case 27: controle_alu.op_code = 29; break; // subdec
+			case 25: controle_alu.op_code = 28; break; // sub
+			case 29: controle_alu.op_code = 7; break; // deca
+			case 16: controle_alu.op_code = 18; break; // lsl
+			case 18: controle_alu.op_code = 19; break; // lsr
+			case 19: controle_alu.op_code = 6; break; // asr
+			case 17: controle_alu.op_code = 5; break; // asl
+			case 20: controle_alu.op_code = 16; break; // load
+			case 22: controle_alu.op_code = 27; break; // store
 		}
 		break;
-	case "10":
+	case 2:
 		controle_alu.op_code = 17; // loadlit
 		instrucao.type = 2;
 		instrucao.rc = substring(bin, 2, 4);
 		instrucao.offset11 = substring(bin, 5, 15);
 		break;
-	case "11":
+	case 3:
 		instrucao.type = 3;
 		instrucao.rc = substring(bin, 2, 4);
 		instrucao.offset8 = substring(bin, 8, 15);
 		instrucao.r = substring(bin, 5, 5);
-		switch(instrucao.r){
-			case "0": controle_alu.op_code = 15; break; // lcl
-			case "1": controle_alu.op_code = 14; break; // lch
+		switch(bin2int(instrucao.r)){
+			case 0: controle_alu.op_code = 15; break; // lcl
+			case 1: controle_alu.op_code = 14; break; // lch
 		}
 		break;
 	}

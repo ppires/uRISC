@@ -2,6 +2,8 @@
 #define CONTROLE_H
 
 #include "aux.h"
+#include "memoria.h"
+#include "banco_de_registradores.h"
 
 typedef struct{
 	short int zero;
@@ -51,6 +53,16 @@ typedef struct {
 	short int OpOn;
 	short int PCCond;
 }Controle;
+
+extern BancoDeInstrucoes bancoI;
+extern BancoDeRegistradores bancoR;
+extern Memoria mem;
+extern Registrador *PC;
+extern Registrador IR;
+extern Registrador aluA, aluB, ALUOut;
+extern Controle controle;
+extern ControleALU controle_alu;
+extern ALUFlags alu_flags;
 
 Instrucao decodeInstrucao(short int hex);
 
