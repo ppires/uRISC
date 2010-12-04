@@ -13,10 +13,15 @@ typedef struct{
 }ALUFlags;
 
 typedef struct {
+	short int op_code;
+	short int cond;
+}ControleALU;
+
+typedef struct {
 	int type; // 0, 1, 2 ou 3
 
 	// Formato 01
-	Registrador *wc;
+	short int *wc;
 	char *op;
 	char *ra;
 	char *rb;
@@ -46,5 +51,13 @@ typedef struct {
 	short int OpOn;
 	short int PCCond;
 }Controle;
+
+Instrucao decodeInstrucao(short int hex);
+
+void inicializaInstrucao(Instrucao *i);
+
+void inicializaControle(Controle *controle);
+
+void inicializaALUFlags(ALUFlags *flags);
 
 #endif /* CONTROLE_H_ */

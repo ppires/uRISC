@@ -3,11 +3,6 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
-O_SRCS += \
-../banco_de_registradores.o \
-../io.o \
-../main.o 
-
 C_SRCS += \
 ../ALU.c \
 ../aux.c \
@@ -16,7 +11,6 @@ C_SRCS += \
 ../io.c \
 ../main.c \
 ../memoria.c \
-../mux.c \
 ../processador.c 
 
 OBJS += \
@@ -27,7 +21,6 @@ OBJS += \
 ./io.o \
 ./main.o \
 ./memoria.o \
-./mux.o \
 ./processador.o 
 
 C_DEPS += \
@@ -38,7 +31,6 @@ C_DEPS += \
 ./io.d \
 ./main.d \
 ./memoria.d \
-./mux.d \
 ./processador.d 
 
 

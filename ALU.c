@@ -1,341 +1,276 @@
 #include "ALU.h"
 
 void execALU(){
-	if(controle.PCWriteCond){ // JUMP
-
-	}
-	else if(controle.OpOn){ // ALU
-		switch(controle.op){
-		case "00000": //zeros
-			zeros(&controle.RegDST);
-			break;
-		case "00010": //and
-			and(&controle.RegDST, aluA, aluB);
-			break;
-		case "01010": // andnota
-			andnota(&controle.RegDST, aluA, aluB);
-			break;
-		case "01001": // passa
-			passa(&controle.RegDST, aluA);
-			break;
-		case "00110": // xor
-			xor(&controle.RegDST, aluA, aluB);
-			break;
-		case "00100": // or
-			or(&controle.RegDST, aluA, aluB);
-			break;
-		case "00101": // nor
-			nor(&controle.RegDST, aluA, aluB);
-			break;
-		case "00111": // xnor
-			xnor(&controle.RegDST, aluA, aluB);
-			break;
-		case "01000": // passnota
-			pasnota(&controle.RegDST, aluA);
-			break;
-		case "01011": // ornotb
-			ornotb(&controle.RegDST, aluA, aluB);
-			break;
-		case "00011": // nand
-			nand(&controle.RegDST, aluA, aluB);
-			break;
-		case "00001": // ones
-			ones(&controle.RegDST);
-			break;
-		case "11000": // add
-			add(&controle.RegDST, aluA, aluB);
-			break;
-		case "11010": // addinc
-			addinc(&controle.RegDST, aluA, aluB);
-			break;
-		case "11100": // inca
-			inca(&controle.RegDST, aluA);
-			break;
-		case "11011": // subdec
-			subdec(&controle.RegDST, aluA, aluB);
-			break;
-		case "11001": //sub
-			sub(&controle.RegDST, aluA, aluB);
-			break;
-		case "11101": // deca
-			deca(&controle.RegDST, aluA);
-			break;
-		case "10000": // lsl
-			lsl(&controle.RegDST, aluA);
-			break;
-		case "10010": // lsr
-			lsr(&controle.RegDST, aluA);
-			break;
-		case "10011": // asr
-			asr(&controle.RegDST, aluA);
-			break;
-		case "10001": // asl
-			asl(&controle.RegDST, aluA);
-			break;
-		}
-	}
-	else { // load constant lcl lcr loadlit...
-		switch(controle.op){
-		case "00": // jump false
-			jf(controle.PCCond, aluB);
-			break;
-		case "01": // jump true
-			jt(controle.PCCond, aluB);
-			break;
-		case "10": // jump incondicional
-			j(aluB);
-			break;
-		case "11": // jump and link / jump regiter
-			//switch()
-			//jal(aluB);
-			break;
-		}
+	switch(controle_alu.op_code){
+		case  1: add();      break;
+		case  2: addinc();   break;
+		case  3: and();      break;
+		case  4: andnota();  break;
+		case  5: asl();      break;
+		case  6: asr();      break;
+		case  7: deca();     break;
+		case  8: inca();     break;
+		case  9: j();        break;
+		case 10: jal(); 	 break;
+		case 11: jf(); 	  	 break;
+		case 12: jr(); 		 break;
+		case 13: jt(); 		 break;
+		case 14: lch(); 	 break;
+		case 15: lcl(); 	 break;
+		case 16: load();	 break;
+		case 17: loadlit();	 break;
+		case 18: lsl();		 break;
+		case 19: lsr();		 break;
+		case 20: nand();	 break;
+		case 21: nor();		 break;
+		case 22: ones();	 break;
+		case 23: or();		 break;
+		case 24: ornotb();	 break;
+		case 25: passa();	 break;
+		case 26: passnota(); break;
+		case 27: store();	 break;
+		case 28: sub();		 break;
+		case 29: subdec();	 break;
+		case 30: xnor();	 break;
+		case 31: xor();		 break;
+		case 32: zeros();	 break;
 	}
 }
 
-void add(Flags *flags, Registrador *c, Registrador a, Registrador b){
-	*c = a + b;
-	flags->zero = *c == 0;
-	flags->neg = *c < 0;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
-	flags->carry = verifyCarry(a, b);
+void add(){
+	ALUOut = aluA + aluB; // execução
+	alu_flags.zero = ALUOut == 0;
+	alu_flags.neg = ALUOut < 0;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = aluB > 0 ? (32767 - aluB) < aluA : (-32768 - aluB) > aluA;
+	alu_flags.carry = verifyCarry(aluA, aluB);
 }
 
-void addinc(Flags *flags, Registrador *c, Registrador a, Registrador b){
-	*c =  a + b + 1;
-	flags->zero = *c == 0;
-	flags->neg = *c < 0;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
-	flags->carry = verifyCarry(a, b);
+void addinc(){
+	ALUOut =  aluA + aluB + 1; // execução
+	alu_flags.zero = ALUOut == 0;
+	alu_flags.neg = ALUOut < 0;
+	alu_flags.negzero = (alu_flags.zero || alu_flags.neg);
+	alu_flags.overflow = aluB > 0 ? (32767 - aluB) < aluA : (-32768 - aluB) > aluA;
+	alu_flags.carry = verifyCarry(aluA, aluB);
 }
 
-void and(Flags *flags, Registrador *c, Registrador a, Registrador b){
-	*c = a & b;
-	//flags->zero = *c == 0 ? TRUE : FALSE; TODO
-	//flags->neg = *c < 0 ? TRUE : FALSE;
-	flags->negzero = flags->zero || flags->neg;
-	flags->carry = FALSE;
-	flags->overflow = FALSE;
+void and(){
+	ALUOut = aluA & aluB; // execução
+	//alu_flags.zero = ALUOut == 0 ? TRUE : FALSE; TODO
+	//alu_flags.neg = ALUOut < 0 ? TRUE : FALSE;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.carry = FALSE;
+	alu_flags.overflow = FALSE;
 }
 
-void andnota(Flags *flags, Registrador *c, Registrador a, Registrador b){
-	*c =  ~a & b;
-	*c = a & b;
-	//flags->zero = *c == 0 ? TRUE : FALSE; TODO
-	//flags->neg = *c < 0 ? TRUE : FALSE;
-	flags->negzero = flags->zero || flags->neg;
-	flags->carry = FALSE;
-	flags->overflow = FALSE;
+void andnota(){
+	ALUOut = (~aluA) & aluB; // execução
+	//alu_flags.zero = ALUOut == 0 ? TRUE : FALSE; TODO
+	//alu_flags.neg = ALUOut < 0 ? TRUE : FALSE;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.carry = FALSE;
+	alu_flags.overflow = FALSE;
 }
 
-void asl(Flags *flags, Registrador *c, Registrador a){
-	*c = a << 1;
-	flags->zero = *c == 0 ? TRUE : FALSE;
-	flags->neg = *c < 0 ? TRUE : FALSE;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
-	flags->carry = int2bin(a)[15];
+void asl(){
+	ALUOut = aluA << 1; // execução
+	alu_flags.zero = ALUOut == 0 ? TRUE : FALSE;
+	alu_flags.neg = ALUOut < 0 ? TRUE : FALSE;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = aluB > 0 ? (32767 - aluB) < aluA : (-32768 - aluB) > aluA;
+	alu_flags.carry = int2bin(aluA)[15];
 }
 
-void asr(Flags *flags, Registrador *c, Registrador a){
-	*c = a >> 1;
-	flags->zero = *c == 0 ? TRUE : FALSE;
-	flags->neg = *c < 0 ? TRUE : FALSE;
-	flags->negzero = flags->zero || flags->neg;
-	flags->carry = FALSE;
-	flags->overflow = FALSE;
+void asr(){
+	ALUOut = aluA >> 1; // execução
+	alu_flags.zero = ALUOut == 0 ? TRUE : FALSE;
+	alu_flags.neg = ALUOut < 0 ? TRUE : FALSE;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.carry = FALSE;
+	alu_flags.overflow = FALSE;
 }
 
-void deca(Flags *flags, Registrador *c, Registrador a){
-	*c = a - 1;
-	flags->zero = *c == 0 ? TRUE : FALSE;
-	flags->neg = *c < 0 ? TRUE : FALSE;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
-	flags->carry = verifyCarry(a, -1);
+void deca(){
+	ALUOut = aluA - 1; // execução
+	alu_flags.zero = ALUOut == 0 ? TRUE : FALSE;
+	alu_flags.neg = ALUOut < 0 ? TRUE : FALSE;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = aluB > 0 ? (32767 - aluB) < aluA : (-32768 - aluB) > aluA;
+	alu_flags.carry = verifyCarry(aluA, -1);
 }
 
-void inca(Flags *flags, Registrador *c, Registrador a){
-	*c = a + 1;
-	flags->zero = *c == 0 ? TRUE : FALSE;
-	flags->neg = *c < 0 ? TRUE : FALSE;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
-	flags->carry = verifyCarry(a, 1);
+void inca(){
+	ALUOut = aluA + 1; // execução
+	alu_flags.zero = ALUOut == 0 ? TRUE : FALSE;
+	alu_flags.neg = ALUOut < 0 ? TRUE : FALSE;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = aluB > 0 ? (32767 - aluB) < aluA : (-32768 - aluB) > aluA;
+	alu_flags.carry = verifyCarry(aluA, 1);
 }
 
-void j(Registrador destino_extended){
-	PC += 1;
-	PC += destino_extended;
+void j(){
+	ALUOut = aluB; // cálculo do endereço
 }
 
-void jal(Registrador destino){
-	bancoR.ra = PC + 1;
-	PC = destino;
+void jal(){
+	ALUOut = aluB; // cálculo do endereço
 }
 
-void jf(int flag, Registrador destino_extended){
-	if(flag){
-		PC += 1;
-		PC += destino_extended;
-	}
+void jf(){
+	ALUOut = aluB; // cálculo do endereço
 }
 
-void jt(int flag, Registrador destino_extended){
-	if(flag){
-		PC += 1;
-		PC += destino_extended;
-	}
+void jt(){
+	ALUOut = aluB; // cálculo do endereço
 }
 
-void jr(Registrador destino){
-	PC = destino;
+void jr(){
+	ALUOut = aluB; // cálculo do endereço
 }
 
-void lch(Registrador *c, int offset){
-	*c = (offset << 8) | (*c & 0x00ff);
+void lch(){
+	ALUOut = (aluB << 8) | (ALUOut & 0x00ff); // execução
 }
 
-void lcl(Registrador *c, int offset){
-	*c = offset | (*c & 0xff00);
+void lcl(){
+	ALUOut = aluB | (ALUOut & 0xff00); // execução
 }
 
-Registrador load(Registrador address){
+void load(){
 	/************/
 }
 
-Registrador loadlit(){
+void loadlit(){
 	/************/
 }
 
-void lsl(Flags *flags, Registrador *c, Registrador a){
-	*c = a << 1;
-	flags->zero = *c == 0 ? TRUE : FALSE;
-	flags->neg = *c < 0 ? TRUE : FALSE;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = FALSE;
-	flags->carry = int2bin(a)[15];
+void lsl(){
+	ALUOut = aluA << 1; // execução
+	alu_flags.zero = ALUOut == 0 ? TRUE : FALSE;
+	alu_flags.neg = ALUOut < 0 ? TRUE : FALSE;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = FALSE;
+	alu_flags.carry = int2bin(aluA)[15];
 }
 
-void lsr(Flags *flags, Registrador *c, Registrador a){
-	*c = a >> 1;
-	flags->zero = *c == 0 ? TRUE : FALSE;
-	flags->neg = *c < 0 ? TRUE : FALSE;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = FALSE;
-	flags->carry = FALSE;
+void lsr(){
+	ALUOut = aluA >> 1; // execução
+	alu_flags.zero = ALUOut == 0 ? TRUE : FALSE;
+	alu_flags.neg = ALUOut < 0 ? TRUE : FALSE;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = FALSE;
+	alu_flags.carry = FALSE;
 }
 
-void nand(Flags *flags, Registrador *c, Registrador a, Registrador b){
-	*c = ~(a & b);
-	flags->zero = *c == 0 ? TRUE : FALSE;
-	flags->neg = *c < 0 ? TRUE : FALSE;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = FALSE;
-	flags->carry = FALSE;
+void nand(){
+	ALUOut = ~(aluA & aluB); // execução
+	alu_flags.zero = ALUOut == 0 ? TRUE : FALSE;
+	alu_flags.neg = ALUOut < 0 ? TRUE : FALSE;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = FALSE;
+	alu_flags.carry = FALSE;
 }
 
-void nor(Flags *flags, Registrador *c, Registrador a, Registrador b){
-	*c = ~(a | b);
-	flags->zero = *c == 0 ? TRUE : FALSE;
-	flags->neg = *c < 0 ? TRUE : FALSE;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = FALSE;
-	flags->carry = FALSE;
+void nor(){
+	ALUOut = ~(aluA | aluB); // execução
+	alu_flags.zero = ALUOut == 0 ? TRUE : FALSE;
+	alu_flags.neg = ALUOut < 0 ? TRUE : FALSE;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = FALSE;
+	alu_flags.carry = FALSE;
 }
 
-void ones(Flags *flags, Registrador *reg){
-	*reg = 1;
-	flags->zero = *c == 0 ? TRUE : FALSE;
-	flags->neg = *c < 0 ? TRUE : FALSE;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = FALSE;
-	flags->carry = FALSE;
+void ones(){
+	ALUOut = 1; // execução
+	alu_flags.zero = FALSE;
+	alu_flags.neg = FALSE;
+	alu_flags.negzero = FALSE;
+	alu_flags.overflow = FALSE;
+	alu_flags.carry = FALSE;
 }
 
-void or(Flags *flags, Registrador *c, Registrador a, Registrador b){
-	*c = a | b;
-	flags->zero = *c == 0;
-	flags->neg = *c < 0;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = FALSE;
-	flags->carry = FALSE;
+void or(){
+	ALUOut = aluA | aluB; // execução
+	alu_flags.zero = ALUOut == 0;
+	alu_flags.neg = ALUOut < 0;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = FALSE;
+	alu_flags.carry = FALSE;
 }
 
-void ornotb(Flags *flags, Registrador *c, Registrador a, Registrador b){
-	*c = a | ~b;
-	flags->zero = *c == 0;
-	flags->neg = *c < 0;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = FALSE;
-	flags->carry = FALSE;
+void ornotb(){
+	ALUOut = aluA | ~aluB; // execução
+	alu_flags.zero = ALUOut == 0;
+	alu_flags.neg = ALUOut < 0;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = FALSE;
+	alu_flags.carry = FALSE;
 }
 
-void passa(Flags *flags, Registrador *c, Registrador a){
-	*c = a;
-	flags->zero = *c == 0;
-	flags->neg = *c < 0;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = FALSE;
-	flags->carry = FALSE;
+void passa(){
+	ALUOut = aluA; // execução
+	alu_flags.zero = ALUOut == 0;
+	alu_flags.neg = ALUOut < 0;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = FALSE;
+	alu_flags.carry = FALSE;
 }
 
-void passnota(Flags *flags, Registrador *c, Registrador a){
-	*c = ~a;
-	flags->zero = *c == 0;
-	flags->neg = *c < 0;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = FALSE;
-	flags->carry = FALSE;
+void passnota(){
+	ALUOut = ~aluA; // execução
+	alu_flags.zero = ALUOut == 0;
+	alu_flags.neg = ALUOut < 0;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = FALSE;
+	alu_flags.carry = FALSE;
 }
 
-void store(Registrador a, Registrador b){
+void store(){
 	/******/
 }
 
-void sub(Flags *flags, Registrador *c, Registrador a, Registrador b){
-	*c = a - b;
-	flags->zero = *c == 0;
-	flags->neg = *c < 0;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
-	flags->carry = verifyCarry(a, b);
+void sub(){
+	ALUOut = aluA - aluB; // execução
+	alu_flags.zero = ALUOut == 0;
+	alu_flags.neg = ALUOut < 0;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = aluB > 0 ? (32767 - aluB) < aluA : (-32768 - aluB) > aluA;
+	alu_flags.carry = verifyCarry(aluA, aluB);
 }
 
-void subdec(Flags *flags, Registrador *c, Registrador a, Registrador b){
-	*c = a - b - 1;
-	flags->zero = *c == 0;
-	flags->neg = *c < 0;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = b > 0 ? (32767 - b) < a : (-32768 - b) > a;
-	flags->carry = verifyCarry(a, -b);
+void subdec(){
+	ALUOut = aluA - aluB - 1; // execução
+	alu_flags.zero = ALUOut == 0;
+	alu_flags.neg = ALUOut < 0;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = aluB > 0 ? (32767 - aluB) < aluA : (-32768 - aluB) > aluA;
+	alu_flags.carry = verifyCarry(aluA, -aluB);
 }
 
-void xnor(Flags *flags, Registrador *c, Registrador a, Registrador b){
-	*c = ~(a ^ b);
-	flags->zero = *c == 0;
-	flags->neg = *c < 0;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = FALSE;
-	flags->carry = FALSE;
+void xnor(){
+	ALUOut = ~(aluA ^ aluB); // execução
+	alu_flags.zero = ALUOut == 0;
+	alu_flags.neg = ALUOut < 0;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = FALSE;
+	alu_flags.carry = FALSE;
 }
 
-void xor(Flags *flags, Registrador *c, Registrador a, Registrador b){
-	*c = a ^ b;
-	flags->zero = *c == 0;
-	flags->neg = *c < 0;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = FALSE;
-	flags->carry = FALSE;
+void xor(){
+	ALUOut = aluA ^ aluB; // execução
+	alu_flags.zero = ALUOut == 0;
+	alu_flags.neg = ALUOut < 0;
+	alu_flags.negzero = alu_flags.zero || alu_flags.neg;
+	alu_flags.overflow = FALSE;
+	alu_flags.carry = FALSE;
 }
 
-void zeros(Flags *flags, Registrador *reg){
-	*reg = 0;
-	flags->zero = TRUE;
-	flags->neg = FALSE;
-	flags->negzero = flags->zero || flags->neg;
-	flags->overflow = FALSE;
-	flags->carry = FALSE;
+void zeros(){
+	ALUOut = 0; // execução
+	alu_flags.zero = TRUE;
+	alu_flags.neg = FALSE;
+	alu_flags.negzero = TRUE;
+	alu_flags.overflow = FALSE;
+	alu_flags.carry = FALSE;
 }

@@ -2,6 +2,17 @@
 #define AUX_H
 
 #include <math.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0
+#endif
 
 char *int2bin(short int n);
 

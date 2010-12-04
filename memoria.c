@@ -30,10 +30,3 @@ void carregaInstrucoes(BancoDeInstrucoes *banco, int argc, char *argv[]){
 	}
 	free(line);
 }
-
-void loadProg(, ){
-
-
-
-	short int PC = (short int) atol(line);
-}

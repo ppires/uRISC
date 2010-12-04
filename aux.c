@@ -3,7 +3,7 @@
 char *int2bin(short int n){
     unsigned int i;
     int k;
-    char * binary = (char *) malloc(sizeof(char) * 16);
+    char *binary = (char *) malloc(sizeof(char) * 16);
     i = 1<<(sizeof(n) * 8 - 1);
     for(k = 0; k < 16; k++){
         if (n & i)
@@ -12,7 +12,7 @@ char *int2bin(short int n){
         	binary[k] = '0';
         i >>= 1;
     }
-    printf("%s\n", binary);
+    //printf("%s\n", binary);
     return binary;
 }
 

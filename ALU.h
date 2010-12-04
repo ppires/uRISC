@@ -7,91 +7,94 @@
 #include "banco_de_registradores.h"
 #include "memoria.h"
 
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0
+#endif
+
+
 extern BancoDeInstrucoes bancoI;
 extern BancoDeRegistradores bancoR;
 extern Memoria mem;
 extern Registrador *PC;
 extern Registrador IR;
-extern Registrador aluA, aluB;
+extern Registrador aluA, aluB, ALUOut;
 extern Controle controle;
+extern ControleALU controle_alu;
 extern ALUFlags alu_flags;
 
 
 
 /* ALU functions */
 
-void add(Flags *flags, Registrador *c, Registrador a, Registrador b);
+void execALU();
 
-void addinc(Registrador *c, Registrador a, Registrador b);
+void add();
 
-void and(Registrador *c, Registrador a, Registrador b);
+void addinc();
 
-void andnota(Registrador *c, Registrador a, Registrador b);
+void and();
 
-void asl(Registrador *c, Registrador a);
+void andnota();
 
-void asr(Registrador *c, Registrador a);
+void asl();
 
-void deca(Registrador *c, Registrador a);
+void asr();
 
-void inca(Registrador *c, Registrador a);
+void deca();
 
-void j(Registrador destino_extended);
+void inca();
 
-void jal(Registrador destino);
+void j();
 
-void jf(int flag, Registrador destino_extended);
+void jal();
 
-void jt(int flag, Registrador destino_extended);
+void jf();
 
-void jr(Registrador destino);
+void jt();
 
-void lch(Registrador *c, int offset);
+void jr();
 
-void lcl(Registrador *c, int offset);
+void lch();
 
-Registrador load(Registrador address);
+void lcl();
 
-Registrador loadlit();
+void load();
 
-void lsl(Registrador *c, Registrador a);
+void loadlit();
 
-void lsr(Registrador *c, Registrador a);
+void lsl();
 
-void nand(Registrador *c, Registrador a, Registrador b);
+void lsr();
 
-void nor(Registrador *c, Registrador a, Registrador b);
+void nand();
 
-void ones(Registrador *reg);
+void nor();
 
-void or(Registrador *c, Registrador a, Registrador b);
+void ones();
 
-void ornotb(Registrador *c, Registrador a, Registrador b);
+void or();
 
-void passa(Registrador *c, Registrador a);
+void ornotb();
 
-void passnota(Registrador *c, Registrador a);
+void passa();
 
-void store(Registrador a, Registrador b);
+void passnota();
 
-void sub(Registrador *c, Registrador a, Registrador b);
+void store();
 
-void subdec(Registrador *c, Registrador a, Registrador b);
+void sub();
 
-void xnor(Registrador *c, Registrador a, Registrador b);
+void subdec();
 
-void xor(Registrador *c, Registrador a, Registrador b);
+void xnor();
 
-void zeros(Registrador *reg);
+void xor();
 
-/*****************/
-
-
+void zeros();
 
 
-
-
-
-
-
-#endif ALU_H
+#endif
